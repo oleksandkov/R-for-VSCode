@@ -1,0 +1,14 @@
+LICENSE
+README.md
+.git
+.gitignore
+.DS_Store
+node_modules
+npm-debug.log
+.vscode
+*.swp
+*.swo
+*~
+.idea
+.env
+.env.local

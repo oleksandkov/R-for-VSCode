@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  r-for-vscode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: r-for-vscode-dev
+    image: r-for-vscode:latest
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true
+    command: /bin/bash
