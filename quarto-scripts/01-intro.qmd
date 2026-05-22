@@ -1,0 +1,12 @@
+---
+title: "Quarto Intro"
+format: html
+---
+
+## Overview
+
+This is a simple Quarto document for testing in VS Code.
+
+```{r}
+message("Hello from Quarto + R")
+```

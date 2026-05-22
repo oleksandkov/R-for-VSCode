@@ -1,0 +1,13 @@
+---
+title: "Visualization Example"
+format: html
+---
+
+## Plot Example
+
+```{r}
+plot(iris$Sepal.Length, iris$Petal.Length,
+     col = iris$Species,
+     pch = 19,
+     main = "Iris Scatter Plot")
+```
