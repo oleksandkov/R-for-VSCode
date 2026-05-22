@@ -1,0 +1,10 @@
+---
+title: "Data Summary"
+format: html
+---
+
+## Built-in Dataset
+
+```{r}
+summary(mtcars)
+```
