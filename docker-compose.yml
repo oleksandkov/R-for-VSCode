@@ -8,7 +8,14 @@ services:
     container_name: r-for-vscode-dev
     image: r-for-vscode:latest
     volumes:
-      - .:/workspace
+      # Mount the repo at /workspace — the devcontainer workspaceFolder.
+      # Source code changes on the host are immediately visible inside the container.
+      - .:/workspace:cached
+      # Persist R package library between rebuilds (optional cache volume).
+      # Remove this volume if you want a fully reproducible environment each build.
+      - r-pkg-cache:/usr/local/lib/R/site-library
     stdin_open: true
     tty: true
-    command: /bin/bash
+
+volumes:
+  r-pkg-cache:

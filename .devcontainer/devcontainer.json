@@ -1,15 +1,101 @@
 {
-  "name": "R-for-VSCode (Compose)",
-  "dockerComposeFile": [
-    "../docker-compose.yml"
-  ],
+  // ── Identity ────────────────────────────────────────────────────────────────
+  "name": "R for VSCode",
+
+  // ── Build ───────────────────────────────────────────────────────────────────
+  // Use docker-compose so the service name is explicit and volumes are managed.
+  "dockerComposeFile": ["../docker-compose.yml"],
   "service": "r-for-vscode",
   "workspaceFolder": "/workspace",
+
+  // ── User ────────────────────────────────────────────────────────────────────
+  // Run as the non-root vscode user created in the Dockerfile.
+  "remoteUser": "vscode",
+
+  // ── Lifecycle hooks ─────────────────────────────────────────────────────────
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  // ── Container shutdown behavior ─────────────────────────────────────────────
   "shutdownAction": "stopCompose",
+
+  // ── VSCode customizations ───────────────────────────────────────────────────
   "customizations": {
     "vscode": {
+
+      // ── Extensions ─────────────────────────────────────────────────────────
+      "extensions": [
+        // R language support: IntelliSense, linting, httpgd plot viewer, workspace viewer
+        "REditorSupport.r",
+        // R debugging: breakpoints, variable inspection, debug console
+        "RDebugger.r-debugger",
+        // Python support (required as radian is a Python package)
+        "ms-python.python",
+        // Jupyter notebooks (supports R kernel via IRkernel if installed)
+        "ms-toolsai.jupyter",
+        // Quarto document authoring (.qmd files)
+        "quarto.quarto",
+        // Git: enhanced diff, blame, history in the editor
+        "eamodio.gitlens",
+        // Git: visual branch / commit graph
+        "mhutchie.git-graph",
+        // CSV coloring — useful for data science workflows
+        "mechatroner.rainbow-csv",
+        // Spell checker — great for R Markdown / Quarto documents
+        "streetsidesoftware.code-spell-checker"
+      ],
+
+      // ── Settings ───────────────────────────────────────────────────────────
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        // ── Terminal ─────────────────────────────────────────────────────────
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "icon": "terminal-bash"
+          }
+        },
+
+        // ── R extension: core ─────────────────────────────────────────────────
+        // Point the R extension to radian as the terminal console.
+        // radian provides syntax highlighting, multi-line editing, history search.
+        "r.rterm.linux": "/usr/local/bin/radian",
+
+        // Required for radian: sends code in bracketed-paste mode so
+        // multi-line expressions are evaluated correctly.
+        "r.bracketedPaste": true,
+
+        // Use httpgd for the interactive plot viewer inside VSCode.
+        // httpgd serves SVG plots via HTTP so the R extension can display them
+        // in a dedicated panel without needing an X server.
+        "r.plot.useHttpgd": true,
+
+        // ── R Language Server (LSP) ───────────────────────────────────────────
+        "r.lsp.enabled": true,
+        "r.lsp.diagnostics": true,
+
+        // ── R extension: session watcher ──────────────────────────────────────
+        // Enables the workspace viewer, object preview, and help pages.
+        "r.sessionWatcher": true,
+
+        // ── Editor defaults for .R and .Rmd files ────────────────────────────
+        "[r]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "REditorSupport.r",
+          "editor.tabSize": 2,
+          "editor.insertSpaces": true
+        },
+        "[rmd]": {
+          "editor.wordWrap": "on",
+          "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+          }
+        },
+
+        // ── Git ───────────────────────────────────────────────────────────────
+        "git.autofetch": true,
+        "git.confirmSync": false
       }
     }
   }
